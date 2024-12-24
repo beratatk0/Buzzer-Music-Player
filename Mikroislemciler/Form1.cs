@@ -16,10 +16,30 @@ namespace Mikroislemciler
 		SerialPort serialPort = new SerialPort("COM10", 9600);
 		Timer timer = new Timer();
 
+		int[] gameofthrones = {
+			392, 8, 262, 8, 311, 16, 349, 16, 392, 8, 262, 8, 311, 16, 349, 16,
+			392, 8, 262, 8, 311, 16, 349, 16, 392, 8, 262, 8, 311, 16, 349, 16,
+			392, 8, 262, 8, 330, 16, 349, 16, 392, 8, 262, 8, 330, 16, 349, 16,
+			392, 8, 262, 8, 330, 16, 349, 16, 392, 8, 262, 8, 330, 16, 349, 16,
+			392, -4, 262, -4, 311, 16, 349, 16, 392, 4, 262, 4, 311, 16, 349, 16,
+			294, -1, 349, -4, 233, -4, 311, 16, 294, 16, 349, 4, 233, -4, 311, 16,
+			294, 16, 262, -1, 392, -4, 262, -4, 311, 16, 349, 16, 392, 4, 262, 4,
+			311, 16, 349, 16, 294, -1, 349, -4, 233, -4, 311, 16, 294, 16, 349, 4,
+			233, -4, 311, 16, 294, 16, 262, -1, 392, -4, 262, -4, 311, 16, 349, 16,
+			392, 4, 262, 4, 311, 16, 349, 16, 294, -2, 349, -4, 233, -4, 294, -8,
+			311, -8, 294, -8, 233, -8, 262, -1, 523, -2, 466, -2, 262, -2, 392, -2,
+			311, -2, 311, -4, 349, -4, 392, -1, 523, -2, 466, -2, 262, -2, 392, -2,
+			311, -2, 311, -4, 294, -4, 523, 8, 392, 8, 415, 16, 466, 16, 523, 8,
+			392, 8, 415, 16, 466, 16, 523, 8, 392, 8, 415, 16, 466, 16, 523, 8,
+			392, 8, 415, 16, 466, 16, 0, 4, 415, 16, 466, 16, 1047, 8, 784, 8,
+			831, 16, 932, 16, 1047, 8, 784, 16, 831, 16, 932, 16, 1047, 8, 784, 8,
+			831, 16, 932, 16
+			};
+
 		public Form1()
 		{
 			InitializeComponent();
-			timer.Interval = 500;
+			timer.Interval = 1000;
 			timer.Tick += ConnectArduino;
 			timer.Start();
 		}
@@ -78,8 +98,17 @@ namespace Mikroislemciler
 			{
 				if (selected.ToString() == "Game of Thrones")
 				{
-					SendNoteToArduino("got");
+					var gotArray = string.Join(',', gameofthrones);
+					if (serialPort != null && serialPort.IsOpen)
+					{
+						serialPort.WriteLine("got");
+					}
+					else
+					{
+						MessageBox.Show("Seri port açýk deðil veya geçerli deðil!");
+					}
 				}
+				return;
 			}
 
 			MessageBox.Show("Lütfen þarký seçin");
@@ -90,12 +119,6 @@ namespace Mikroislemciler
 		{
 			if (serialPort.IsOpen)
 			{
-				if (timer.Interval < 3000)
-				{
-					timer.Stop();
-					timer.Interval = 3000;
-					timer.Start();
-				}
 				return;
 			}
 			try
