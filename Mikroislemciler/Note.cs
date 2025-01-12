@@ -15,3 +15,7 @@ namespace Mikroislemciler
         public int Order { get; set; } // Sıra 
     }
 }
+
+
+
+

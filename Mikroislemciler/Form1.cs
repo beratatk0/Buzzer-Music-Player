@@ -20,6 +20,7 @@ namespace Mikroislemciler
         SerialPort serialPort = new SerialPort("COM5", 9600);
         Timer timer = new Timer();
         string note = "";
+        string playingSong = "";
 
 
         private Timer gameTimer = new Timer();
@@ -28,11 +29,12 @@ namespace Mikroislemciler
         private int nextExpectedOrder = 1; // Sýradaki doðru týklama sýrasý
         private List<Note> activeNotes = new List<Note>();
         private Note[] gameOfThronesNotes;
-        private Note[] selectedSong ;
+        private Note[] selectedSong;
         private Note[] twinkleTwinkleNotes;
         private Note[] harryPotterNotes;
         private Note[] merrychristmasNotes;
         private Note[] supermarioNotes;
+        bool calmayaDevamEt=true;
         public Form1()
         {
             twinkleTwinkleNotes = new Note[]
@@ -46,31 +48,31 @@ namespace Mikroislemciler
                 new Note { Time = 6000, Position = 100, Order = 7 }
            };
 
-           
+
             gameOfThronesNotes = new Note[]
           {
             new Note { Freq = 392, Duration = 8, Time = 0,     Position =   100, Order = 1 },
             new Note { Freq = 262, Duration = 8, Time = 500,  Position =    300, Order = 2 },
-            new Note { Freq = 311, Duration = 16, Time = 1000, Position =  500, Order = 3 },
-            new Note { Freq = 349, Duration = 16, Time = 1500, Position =  700, Order = 4 },
+            new Note { Freq = 311, Duration = 16, Time = 700, Position =  500, Order = 3 },
+            new Note { Freq = 349, Duration = 16, Time = 900, Position =  700, Order = 4 },
 
-            new Note { Freq = 392, Duration = 8, Time = 2000,   Position = 100 , Order = 5 },
-            new Note { Freq = 262, Duration = 8, Time = 3000,   Position =  300  , Order = 6 },
-            new Note { Freq = 311, Duration = 16, Time = 6000,   Position = 500, Order = 7 },
-            new Note { Freq = 349, Duration = 16, Time = 7000,   Position = 700, Order = 8 },
+            new Note { Freq = 392, Duration = 8, Time = 1100,   Position = 100 , Order = 5 },
+            new Note { Freq = 262, Duration = 8, Time = 1600,   Position =  300  , Order = 6 },
+            new Note { Freq = 311, Duration = 16, Time = 1800,   Position = 500, Order = 7 },
+            new Note { Freq = 349, Duration = 16, Time = 2000,   Position = 700, Order = 8 },
 
-            new Note { Freq = 392, Duration = 8, Time = 8000,   Position =  100, Order = 9 },
-            new Note { Freq = 262, Duration = 8, Time = 9000,   Position =  300, Order = 10 },
-            new Note { Freq = 311, Duration = 16, Time = 10050,   Position =  500, Order = 11 },
-            new Note { Freq = 349, Duration = 16, Time = 11550,  Position =  700, Order = 12 },
+            new Note { Freq = 392, Duration = 8, Time = 2500,   Position =  100, Order = 9 },
+            new Note { Freq = 262, Duration = 8, Time = 7000,   Position =  300, Order = 10 },
+            new Note { Freq = 311, Duration = 16, Time = 8000,   Position =  500, Order = 11 },
+            new Note { Freq = 349, Duration = 16, Time = 9000,  Position =  700, Order = 12 },
 
 
-            new Note { Freq = 392, Duration = 8, Time = 12000,   Position = 100, Order = 13 },
-            new Note { Freq = 262, Duration = 8, Time = 13300,   Position = 300, Order = 14 },
-            new Note { Freq = 330, Duration = 16, Time = 14000,   Position = 500, Order = 15 },
-            new Note { Freq = 349, Duration = 16, Time = 15706,   Position = 700, Order = 16 },
-             
-            new Note { Freq = 392, Duration = 8, Time = 16920,   Position = 100, Order = 17 },
+            new Note { Freq = 392, Duration = 8, Time = 10000,   Position = 100, Order = 13 },
+            new Note { Freq = 262, Duration = 8, Time = 10500,   Position = 300, Order = 14 },
+            new Note { Freq = 330, Duration = 16, Time = 11000,   Position = 500, Order = 15 },
+            new Note { Freq = 349, Duration = 16, Time = 12706,   Position = 700, Order = 16 },
+
+            new Note { Freq = 392, Duration = 8, Time = 13920,   Position = 100, Order = 17 },
             new Note { Freq = 262, Duration = 8, Time = 17000,   Position = 300, Order = 18 },
             new Note { Freq = 330, Duration = 16, Time = 18080,   Position = 500, Order = 19 },
             new Note { Freq = 349, Duration = 16, Time = 19240,   Position = 700, Order = 20 },
@@ -112,7 +114,7 @@ namespace Mikroislemciler
 
             new Note { Freq = 330, Duration = 16, Time = 50208,  Position = 100, Order = 49 },
             new Note { Freq = 349, Duration = 16, Time = 51404,  Position = 300, Order = 50 },
-            new Note { Freq = 0, Duration = 4, Time = 52600,     Position = 500, Order = 51 },
+            new Note { Freq = 0,   Duration = 4, Time = 52600,     Position = 500, Order = 51 },
             new Note { Freq = 415, Duration = 16, Time = 53064,  Position = 700, Order = 52 },
 
             new Note { Freq = 466, Duration = 16, Time = 54800,  Position = 100, Order = 53 },
@@ -164,12 +166,12 @@ namespace Mikroislemciler
             new Note { Freq = 698, Duration = 2, Time = 74,  Position = 300,  Order = 22 },
             new Note { Freq = 659, Duration = 4, Time = 76,   Position = 500, Order = 23 },
             new Note { Freq = 622, Duration = 2, Time = 80,   Position = 700, Order = 24 },
-                                                               
+
             new Note { Freq = 494, Duration = 4, Time = 82,  Position = 100,   Order = 25 },
             new Note { Freq = 622, Duration = -4, Time = 86, Position = 300,    Order = 26 },
             new Note { Freq = 587, Duration = 8, Time = 92,   Position = 500,  Order = 27 },
             new Note { Freq = 554, Duration = 4, Time = 100,  Position = 700,   Order = 28 },
-                                                               
+
             new Note { Freq = 277, Duration = 2, Time = 104,  Position = 100,   Order = 29 },
             new Note { Freq = 494, Duration = 4, Time = 106,  Position = 300,   Order = 30 },
             new Note { Freq = 392, Duration = -1, Time = 110, Position = 500,   Order = 31 },
@@ -404,14 +406,14 @@ namespace Mikroislemciler
             timer.Tick += ConnectArduino;
             timer.Enabled = true;
             timer.Start();
-           
+
 
         }
         #endregion
 
         #region Game
-      
-        private async Task Play( int tempo, int lastNoteOrder)
+        
+        private async Task Play(Note[] selectedSong ,int tempo, int lastNoteOrder)
         {
 
             int wholenote = (60000 * 4) / tempo;
@@ -436,11 +438,13 @@ namespace Mikroislemciler
                     }
 
 
-                   
-                  //  CreateFallingButton(selectedSong[i].Position, selectedSong[i].Order);
+                    // CreateFallingButton(selectedSong[i].Position, selectedSong[i].Order);
 
-
-                    await Task.Delay(noteDuration);
+                    if (noteDuration > 0)
+                    {
+                        await Task.Delay(noteDuration);
+                    }
+                    
                 }
             }
         }
@@ -448,40 +452,40 @@ namespace Mikroislemciler
         {
             elapsedTime += gameTimer.Interval;
 
-            foreach (var note in selectedSong)
+            foreach (Note note in selectedSong)
             {
                 if (note.Time <= elapsedTime && !activeNotes.Contains(note))
                 {
-                    CreateFallingButton(note.Position, note.Order,note.Freq);
+                    CreateFallingButton(note.Position, note.Order, note);
                     activeNotes.Add(note);
                 }
+            }
 
-                foreach (var button in panel1.Controls.OfType<Button>().ToList())
+            foreach (var button in panel1.Controls.OfType<Button>().ToList())
+            {
+                button.Top += 4;
+
+                if (button.Top > panel1.ClientSize.Height)
                 {
-                    button.Top += 4;
-
-                    if (button.Top > panel1.ClientSize.Height)
+                    panel1.Controls.Remove(button);
+                    int missedOrder = (int)button.Tag; // Tag'den doðru sýrayý al
+                    if (missedOrder == nextExpectedOrder)
                     {
-                        panel1.Controls.Remove(button);
-                        int missedOrder = (int)button.Tag;
-                        if (missedOrder == nextExpectedOrder)
-                        {
-                            GameOver();
-                            return;
-                        }
+                        GameOver(); // Sýradaki doðru nota kaçýrýldýysa oyun biter
+                        return;
                     }
                 }
             }
         }
 
-        private void CreateFallingButton(int position, int order,int note)
+        private void CreateFallingButton(int position, int order, Note note)
         {
             var button = new Button
             {
-                Name =note.ToString(),
-                Size = new Size(80, 200),
+                Name = "C4",
+                Size = new Size(50, 50),
                 BackColor = Color.Black,
-                Left = position+300,
+                Left = position,
                 Top = 0,
                 Tag = order // Doðru sýralama için kullanýlýr
             };
@@ -491,12 +495,34 @@ namespace Mikroislemciler
                 int clickedOrder = (int)button.Tag; // Butonun sýrasý
                 if (clickedOrder == nextExpectedOrder)
                 {
+                    if (playingSong == "got")
+                    {
+                        PlaySong(note, gameofthronesTempo, gameOfThronesNotes.Length);
+                    }
+                    else if(playingSong == "hp")
+                    {
+                        PlaySong(note, harrypotterTempo, harryPotterNotes.Length);
+
+                    }
+                    else if(playingSong == "mc")
+                    {
+                        PlaySong(note, merrychristmasTempo, harryPotterNotes.Length);
+
+                    }
+                    else if(playingSong == "sm")
+                    {
+                        PlaySong(note, supermariotempo, supermarioNotes.Length);
+
+                    }
+                    //SendNoteToArduino(note);
                     nextExpectedOrder++; // Sýradaki nota doðruysa sýrayý ilerlet
                     score += 10;
                     panel1.Controls.Remove(button);
+
                 }
                 else
                 {
+                    playingSong = "";
                     GameOver(); // Yanlýþ sýrada butona týklandýysa oyun biter
                 }
             };
@@ -515,22 +541,23 @@ namespace Mikroislemciler
 
         private GameState gameState = GameState.NotStarted;
 
-        //private void button1_Click(object sender, EventArgs e)
-        //{
-        //    if (gameState == GameState.Finished)
-        //    {
-        //        RestartGame();
-        //    }
-        //    else if (gameState == GameState.Running)
-        //    {
+        private void button1_Click(object sender, EventArgs e)
+        {
+            if (gameState == GameState.Finished)
+            {
+                RestartGame();
+            }
+            else if (gameState == GameState.Running)
+            {
 
-        //        MessageBox.Show("Oyun zaten çalýþýyor!", "Bilgi", MessageBoxButtons.OK, MessageBoxIcon.Information);
-        //    }
-        //    else if (gameState == GameState.NotStarted)
-        //    {
-        //        StartGame();
-        //    }
-        //}
+                MessageBox.Show("Oyun yeniden baþlatýlýyor!", "Bilgi", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                RestartGame();
+            }
+            else if (gameState == GameState.NotStarted)
+            {
+                StartGame();
+            }
+        }
 
         private void StartGame()
         {
@@ -565,20 +592,12 @@ namespace Mikroislemciler
         private void GameOver()
         {
             gameState = GameState.Finished;
-            elapsedTime = 0;
-            score = 0;
-            nextExpectedOrder = 1;
-            activeNotes.Clear();
-            panel1.Controls.Clear();
             gameTimer.Stop();
-
             MessageBox.Show($"Oyun bitti! Skorunuz: {score}", "Game Over", MessageBoxButtons.OK, MessageBoxIcon.Information);
         }
 
-   
 
-    
-        #endregion 
+        #endregion
 
         #region Songs
         int gameofthronesTempo = 85;
@@ -924,6 +943,13 @@ namespace Mikroislemciler
                 serialPort.WriteLine("");
             }
         }
+        private void SendNoteToArduino(Note note)
+        {
+            string message = $"{note.Freq},{note.Duration}";
+
+            serialPort.WriteLine(message);
+
+        }
         private void SendNoteToArduino(string note)
         {
 
@@ -939,6 +965,7 @@ namespace Mikroislemciler
         private void playButton_Click(object sender, EventArgs e)
         {
             var selected = listBox1.SelectedItem;
+            calmayaDevamEt = true;
             if (selected == null)
             {
                 MessageBox.Show("Lütfen þarký seçin!");
@@ -946,54 +973,103 @@ namespace Mikroislemciler
             }
             if (selected.ToString() == "Game of Thrones")
             {
-                PlaySong(gameOfThronesNotes, gameofthronesTempo,65);
+                PlaySong(gameOfThronesNotes, gameofthronesTempo, 65);
             }
             else if (selected.ToString() == "Harry Potter")
             {
-                PlaySong(harryPotterNotes, harrypotterTempo,60);
+                PlaySong(harryPotterNotes, harrypotterTempo, 60);
             }
             else if (selected.ToString() == "Merry Christmas")
             {
-                PlaySong(merrychristmasNotes, merrychristmasTempo,91);
+                PlaySong(merrychristmasNotes, merrychristmasTempo, 91);
             }
             else if (selected.ToString() == "Super Mario")
             {
-                PlaySong(supermarioNotes, supermariotempo,88);
+                PlaySong(supermarioNotes, supermariotempo, 88);
             }
 
         }
 
         private async Task PlaySong(Note[] melody, int tempo, int lastNoteOrder)
         {
-           
+
             int wholenote = (60000 * 4) / tempo;
 
             if (serialPort.IsOpen)
             {
                 for (int i = 0; i < lastNoteOrder; i++)
                 {
-                   
-                    int frequency = melody[i].Freq;
-                    int divider = melody[i].Duration;
-
-                    // Süreyi hesapla
-                    int noteDuration;
-                    if (divider > 0)
+                    if (calmayaDevamEt)
                     {
-                        noteDuration = wholenote / divider; 
+                        int frequency = melody[i].Freq;
+                        int divider = melody[i].Duration;
+
+                        // Süreyi hesapla
+                        int noteDuration;
+                        if (divider > 0)
+                        {
+                            noteDuration = wholenote / divider;
+                        }
+                        else
+                        {
+                            noteDuration = (int)((wholenote / Math.Abs(divider)) * 1.5);
+                        }
+
+
+                        string message = $"{frequency},{noteDuration}";
+                        serialPort.WriteLine(message);
+
+
+                        await Task.Delay(noteDuration);
                     }
                     else
                     {
-                        noteDuration = (int)((wholenote / Math.Abs(divider)) * 1.5); 
+                        return;
                     }
 
-                  
-                    string message = $"{frequency},{noteDuration}";
-                    serialPort.WriteLine(message);
-
-                 
-                    await Task.Delay(noteDuration);
+                   
                 }
+            }
+        }
+        private async Task PlaySong(Note melody, int tempo, int lastNoteOrder)
+        {
+
+            int wholenote = (60000 * 4) / tempo;
+
+            if (serialPort.IsOpen)
+            {
+               
+                
+                    if (calmayaDevamEt)
+                    {
+                        int frequency = melody.Freq;
+                        int divider = melody.Duration;
+
+                        // Süreyi hesapla
+                        int noteDuration;
+                        if (divider > 0)
+                        {
+                            noteDuration = wholenote / divider;
+                        }
+                        else
+                        {
+                            noteDuration = (int)((wholenote / Math.Abs(divider)) * 1.5);
+                        }
+
+
+                        string message = $"{frequency},{noteDuration}";
+                        serialPort.WriteLine(message);
+
+
+                        await Task.Delay(noteDuration);
+                    }
+                    else
+                    {
+                        return;
+                    }
+
+
+                
             }
         }
         #endregion
@@ -1044,35 +1120,40 @@ namespace Mikroislemciler
 
 
         }
-       
+
         private void GameButton_Click(object sender, EventArgs e)
         {
-            if (panel1.Visible )
+            if (panel1.Visible)
             {
                 panel1.BringToFront();
 
-               
-                 var selected = listBox1.SelectedItem;
-              
+
+                var selected = listBox1.SelectedItem;
+
                 if (selected.ToString() == "Game of Thrones")
                 {
+                    playingSong = "got";
                     selectedSong = gameOfThronesNotes;
                 }
                 else if (selected.ToString() == "Harry Potter")
                 {
+                    playingSong = "hp";
                     selectedSong = harryPotterNotes;
                 }
                 else if (selected.ToString() == "Merry Christmas")
                 {
+                    playingSong = "mc";
                     selectedSong = merrychristmasNotes;
                 }
                 else if (selected.ToString() == "Super Mario")
                 {
+                    playingSong = "sm";
                     selectedSong = supermarioNotes;
                 }
 
                 if (selectedSong == null)
                 {
+                    playingSong = "";
                     MessageBox.Show("Lütfen þarký seçin!");
                     return;
                 }
@@ -1083,7 +1164,7 @@ namespace Mikroislemciler
                 else if (gameState == GameState.Running)
                 {
 
-                    MessageBox.Show("Oyun zaten çalýþýyor!", "Bilgi", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                    RestartGame();
                 }
                 else if (gameState == GameState.NotStarted)
                 {
@@ -1092,6 +1173,13 @@ namespace Mikroislemciler
             }
         }
 
-
+        private void StopSongButton_Click(object sender, EventArgs e)
+        {
+            if (serialPort.IsOpen)
+            {
+                calmayaDevamEt = false;
+            }
+        }
+       
     }
 }

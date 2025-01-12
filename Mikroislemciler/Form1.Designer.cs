@@ -34,6 +34,7 @@ namespace Mikroislemciler
             listBox1 = new ListBox();
             playButton = new Button();
             leftPanel = new Panel();
+            StopSongButton = new Button();
             GameButton = new Button();
             PianoButton = new Button();
             buttonG = new Button();
@@ -162,6 +163,7 @@ namespace Mikroislemciler
             // leftPanel
             // 
             leftPanel.BackColor = Color.FromArgb(61, 61, 61);
+            leftPanel.Controls.Add(StopSongButton);
             leftPanel.Controls.Add(GameButton);
             leftPanel.Controls.Add(PianoButton);
             leftPanel.Controls.Add(playButton);
@@ -173,6 +175,22 @@ namespace Mikroislemciler
             leftPanel.Size = new Size(174, 677);
             leftPanel.TabIndex = 9;
             // 
+            // StopSongButton
+            // 
+            StopSongButton.BackColor = SystemColors.ControlDarkDark;
+            StopSongButton.FlatAppearance.BorderColor = Color.FromArgb(40, 40, 40);
+            StopSongButton.FlatAppearance.BorderSize = 0;
+            StopSongButton.FlatStyle = FlatStyle.Flat;
+            StopSongButton.ForeColor = SystemColors.Control;
+            StopSongButton.Location = new Point(0, 217);
+            StopSongButton.Margin = new Padding(3, 4, 3, 4);
+            StopSongButton.Name = "StopSongButton";
+            StopSongButton.Size = new Size(174, 55);
+            StopSongButton.TabIndex = 0;
+            StopSongButton.Text = "Þarkýyý Durdur";
+            StopSongButton.UseVisualStyleBackColor = false;
+            StopSongButton.Click += StopSongButton_Click;
+            // 
             // GameButton
             // 
             GameButton.BackColor = SystemColors.ControlDarkDark;
@@ -180,7 +198,7 @@ namespace Mikroislemciler
             GameButton.FlatAppearance.BorderSize = 0;
             GameButton.FlatStyle = FlatStyle.Flat;
             GameButton.ForeColor = SystemColors.Control;
-            GameButton.Location = new Point(-3, 217);
+            GameButton.Location = new Point(2, 303);
             GameButton.Margin = new Padding(3, 4, 3, 4);
             GameButton.Name = "GameButton";
             GameButton.Size = new Size(174, 55);
@@ -640,5 +658,6 @@ namespace Mikroislemciler
         private Button PianoButton;
         private Button GameButton;
         private Panel panel1;
+        private Button StopSongButton;
     }
 }
