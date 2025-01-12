@@ -17,7 +17,7 @@ namespace Mikroislemciler
         public static extern int SendMessage(IntPtr hWnd, int Msg, int wParam, int lParam);
         [DllImportAttribute("user32.dll")]
         public static extern bool ReleaseCapture();
-        SerialPort serialPort = new SerialPort("COM6", 9600);
+        SerialPort serialPort = new SerialPort("COM5", 9600);
         Timer timer = new Timer();
         string note = "";
 
@@ -410,13 +410,13 @@ namespace Mikroislemciler
         #endregion
 
         #region Game
-
+      
         private async Task Play( int tempo, int lastNoteOrder)
         {
 
             int wholenote = (60000 * 4) / tempo;
 
-            if (!serialPort.IsOpen)
+            if (true)
             {
                 for (int i = 0; i < lastNoteOrder; i++)
                 {
@@ -436,8 +436,8 @@ namespace Mikroislemciler
                     }
 
 
-                    string message = $"{frequency},{noteDuration}";
-                    CreateFallingButton(selectedSong[i].Position, selectedSong[i].Order);
+                   
+                  //  CreateFallingButton(selectedSong[i].Position, selectedSong[i].Order);
 
 
                     await Task.Delay(noteDuration);
@@ -448,29 +448,37 @@ namespace Mikroislemciler
         {
             elapsedTime += gameTimer.Interval;
 
-        
-
-            foreach (var button in panel1.Controls.OfType<Button>().ToList())
+            foreach (var note in selectedSong)
             {
-                button.Top += 4;
-
-                if (button.Top > panel1.ClientSize.Height)
+                if (note.Time <= elapsedTime && !activeNotes.Contains(note))
                 {
-                    panel1.Controls.Remove(button);
-                    int missedOrder = (int)button.Tag; 
-                    if (missedOrder == nextExpectedOrder)
+                    CreateFallingButton(note.Position, note.Order,note.Freq);
+                    activeNotes.Add(note);
+                }
+
+                foreach (var button in panel1.Controls.OfType<Button>().ToList())
+                {
+                    button.Top += 4;
+
+                    if (button.Top > panel1.ClientSize.Height)
                     {
-                        GameOver(); 
-                        return;
+                        panel1.Controls.Remove(button);
+                        int missedOrder = (int)button.Tag;
+                        if (missedOrder == nextExpectedOrder)
+                        {
+                            GameOver();
+                            return;
+                        }
                     }
                 }
             }
         }
 
-        private void CreateFallingButton(int position, int order)
+        private void CreateFallingButton(int position, int order,int note)
         {
             var button = new Button
             {
+                Name =note.ToString(),
                 Size = new Size(80, 200),
                 BackColor = Color.Black,
                 Left = position+300,
@@ -507,22 +515,22 @@ namespace Mikroislemciler
 
         private GameState gameState = GameState.NotStarted;
 
-        private void button1_Click(object sender, EventArgs e)
-        {
-            if (gameState == GameState.Finished)
-            {
-                RestartGame();
-            }
-            else if (gameState == GameState.Running)
-            {
+        //private void button1_Click(object sender, EventArgs e)
+        //{
+        //    if (gameState == GameState.Finished)
+        //    {
+        //        RestartGame();
+        //    }
+        //    else if (gameState == GameState.Running)
+        //    {
 
-                MessageBox.Show("Oyun zaten çalýþýyor!", "Bilgi", MessageBoxButtons.OK, MessageBoxIcon.Information);
-            }
-            else if (gameState == GameState.NotStarted)
-            {
-                StartGame();
-            }
-        }
+        //        MessageBox.Show("Oyun zaten çalýþýyor!", "Bilgi", MessageBoxButtons.OK, MessageBoxIcon.Information);
+        //    }
+        //    else if (gameState == GameState.NotStarted)
+        //    {
+        //        StartGame();
+        //    }
+        //}
 
         private void StartGame()
         {
@@ -952,7 +960,6 @@ namespace Mikroislemciler
             {
                 PlaySong(supermarioNotes, supermariotempo,88);
             }
-
 
         }
 
