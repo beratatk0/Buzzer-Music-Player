@@ -17,7 +17,7 @@ namespace Mikroislemciler
         public static extern int SendMessage(IntPtr hWnd, int Msg, int wParam, int lParam);
         [DllImportAttribute("user32.dll")]
         public static extern bool ReleaseCapture();
-        SerialPort serialPort = new SerialPort("COM5", 9600);
+        SerialPort serialPort = new SerialPort("COM11", 9600);
         Timer timer = new Timer();
         string note = "";
         string playingSong = "";
@@ -37,370 +37,325 @@ namespace Mikroislemciler
         bool calmayaDevamEt=true;
         public Form1()
         {
-            twinkleTwinkleNotes = new Note[]
-           {
-                new Note { Time = 0, Position = 100, Order = 1 },
-                new Note { Time = 1000, Position = 300, Order = 2 },
-                new Note { Time = 2000, Position = 500, Order = 3 },
-                new Note { Time = 3000, Position = 100, Order = 4 },
-                new Note { Time = 4000, Position = 300, Order = 5 },
-                new Note { Time = 5000, Position = 500, Order = 6 },
-                new Note { Time = 6000, Position = 100, Order = 7 }
-           };
-
-
-            gameOfThronesNotes = new Note[]
-          {
-            new Note { Freq = 392, Duration = 8, Time = 0,     Position =   100, Order = 1 },
-            new Note { Freq = 262, Duration = 8, Time = 500,  Position =    300, Order = 2 },
-            new Note { Freq = 311, Duration = 16, Time = 700, Position =  500, Order = 3 },
-            new Note { Freq = 349, Duration = 16, Time = 900, Position =  700, Order = 4 },
-
-            new Note { Freq = 392, Duration = 8, Time = 1100,   Position = 100 , Order = 5 },
-            new Note { Freq = 262, Duration = 8, Time = 1600,   Position =  300  , Order = 6 },
-            new Note { Freq = 311, Duration = 16, Time = 1800,   Position = 500, Order = 7 },
-            new Note { Freq = 349, Duration = 16, Time = 2000,   Position = 700, Order = 8 },
-
-            new Note { Freq = 392, Duration = 8, Time = 2500,   Position =  100, Order = 9 },
-            new Note { Freq = 262, Duration = 8, Time = 7000,   Position =  300, Order = 10 },
-            new Note { Freq = 311, Duration = 16, Time = 8000,   Position =  500, Order = 11 },
-            new Note { Freq = 349, Duration = 16, Time = 9000,  Position =  700, Order = 12 },
-
-
-            new Note { Freq = 392, Duration = 8, Time = 10000,   Position = 100, Order = 13 },
-            new Note { Freq = 262, Duration = 8, Time = 10500,   Position = 300, Order = 14 },
-            new Note { Freq = 330, Duration = 16, Time = 11000,   Position = 500, Order = 15 },
-            new Note { Freq = 349, Duration = 16, Time = 12706,   Position = 700, Order = 16 },
-
-            new Note { Freq = 392, Duration = 8, Time = 13920,   Position = 100, Order = 17 },
-            new Note { Freq = 262, Duration = 8, Time = 17000,   Position = 300, Order = 18 },
-            new Note { Freq = 330, Duration = 16, Time = 18080,   Position = 500, Order = 19 },
-            new Note { Freq = 349, Duration = 16, Time = 19240,   Position = 700, Order = 20 },
-
-            new Note { Freq = 392, Duration = -4, Time = 20400,   Position = 100, Order = 21 },
-            new Note { Freq = 262, Duration = -4, Time = 21360,  Position = 300, Order = 22 },
-            new Note { Freq = 311, Duration = 16, Time = 22560,  Position = 500, Order = 23 },
-            new Note { Freq = 349, Duration = 16, Time = 23720,   Position = 700, Order = 24 },
-
-            new Note { Freq = 392, Duration = 4, Time = 24880,   Position = 100, Order = 25 },
-            new Note { Freq = 262, Duration = 4, Time = 25920  , Position = 300, Order = 26 },
-            new Note { Freq = 311, Duration = 16, Time = 26960, Position = 500, Order = 27 },
-            new Note { Freq = 349, Duration = 16, Time = 28120, Position = 700, Order = 28 },
-
-            new Note { Freq = 294, Duration = -1, Time = 29280, Position = 100, Order = 29 },
-            new Note { Freq = 349, Duration = -4, Time = 30270, Position = 300, Order = 30 },
-            new Note { Freq = 233, Duration = -4, Time = 31230, Position = 500, Order = 31 },
-            new Note { Freq = 311, Duration = 16, Time = 32440, Position = 700, Order = 32 },
-
-            new Note { Freq = 294, Duration = 16, Time = 33600, Position = 100, Order = 33 },
-            new Note { Freq = 349, Duration = 4, Time = 34760, Position = 300, Order = 34 },
-            new Note { Freq = 233, Duration = -4, Time = 35720, Position = 500, Order = 35 },
-            new Note { Freq = 311, Duration = 16, Time = 36920, Position = 700, Order = 36 },
-
-            new Note { Freq = 294, Duration = 16, Time = 37080, Position = 100, Order = 37 },
-            new Note { Freq = 262, Duration = -1, Time = 38240, Position = 300, Order = 38 },
-            new Note { Freq = 392, Duration = -4, Time = 39200, Position = 500, Order = 39 },
-            new Note { Freq = 262, Duration = -4, Time = 40160, Position = 700, Order = 40 },
-
-            new Note { Freq = 311, Duration = 16, Time = 41320, Position = 100, Order = 41 },
-            new Note { Freq = 349, Duration = 16, Time = 42480, Position = 300, Order = 42 },
-            new Note { Freq = 392, Duration = 8, Time = 43640,   Position = 500, Order = 43 },
-            new Note { Freq = 262, Duration = 8, Time = 44720,   Position = 700, Order = 44 },
-
-            new Note { Freq = 330, Duration = 16, Time = 45800,   Position = 100, Order = 45 },
-            new Note { Freq = 349, Duration = 16, Time = 46906,  Position = 300, Order = 46 },
-            new Note { Freq = 392, Duration = 8, Time = 48012,   Position = 500, Order = 47 },
-            new Note { Freq = 262, Duration = 8, Time = 49020,   Position = 700, Order = 48 },
-
-            new Note { Freq = 330, Duration = 16, Time = 50208,  Position = 100, Order = 49 },
-            new Note { Freq = 349, Duration = 16, Time = 51404,  Position = 300, Order = 50 },
-            new Note { Freq = 0,   Duration = 4, Time = 52600,     Position = 500, Order = 51 },
-            new Note { Freq = 415, Duration = 16, Time = 53064,  Position = 700, Order = 52 },
-
-            new Note { Freq = 466, Duration = 16, Time = 54800,  Position = 100, Order = 53 },
-            new Note { Freq = 1047, Duration = 8, Time = 55906,  Position = 300, Order = 54 },
-            new Note { Freq = 784, Duration = 8, Time = 56004,   Position = 500, Order = 55 },
-            new Note { Freq = 831, Duration = 16, Time = 57012,  Position = 700, Order = 56 },
-
-            new Note { Freq = 932, Duration = 16, Time = 58028,  Position = 100, Order = 57 },
-            new Note { Freq = 1047, Duration = 8, Time = 59404,  Position = 300, Order = 58 },
-            new Note { Freq = 784, Duration = 16, Time = 60502,  Position = 500, Order = 59 },
-            new Note { Freq = 831, Duration = 16, Time = 61608,  Position = 700, Order = 60 },
-
-            new Note { Freq = 932, Duration = 16, Time = 62084,   Position = 100, Order = 61 },
-            new Note { Freq = 1047, Duration = 8, Time = 63000,   Position = 300, Order = 62 },
-            new Note { Freq = 784, Duration = 8, Time = 64008 , Position = 500, Order = 63 },
-            new Note { Freq = 831, Duration = 16, Time = 65016, Position = 700, Order = 64 },
-
-            new Note { Freq = 932, Duration = 16, Time = 66032, Position = 100, Order = 65 }
-          };
-
-            harryPotterNotes = new Note[]
-        {
-            new Note { Freq = 0, Duration = 2,  Time = 0,    Position = 100, Order = 1 },
-            new Note { Freq = 294, Duration = 4, Time = 2,      Position = 300, Order = 2 },
-            new Note { Freq = 392, Duration = -4, Time = 6,     Position = 500, Order = 3 },
-            new Note { Freq = 466, Duration = 8, Time = 12,     Position = 700, Order = 4 },
-
-            new Note { Freq = 440, Duration = 4, Time = 20,     Position = 100,  Order = 5 },
-            new Note { Freq = 392, Duration = 2, Time = 24,     Position = 300,  Order = 6 },
-            new Note { Freq = 587, Duration = 4, Time = 26,     Position = 500, Order = 7 },
-            new Note { Freq = 523, Duration = -2, Time = 30,     Position = 700, Order = 8 },
-
-            new Note { Freq = 440, Duration = -2, Time = 28,    Position = 100,  Order = 9 },
-            new Note { Freq = 392, Duration = -4, Time = 24,    Position = 300,  Order = 10 },
-            new Note { Freq = 466, Duration = 8, Time = 20,     Position = 500,Order = 11 },
-            new Note { Freq = 440, Duration = 4, Time = 28,     Position = 700,Order = 12 },
-
-            new Note { Freq = 349, Duration = 2, Time = 32,     Position = 100, Order = 13 },
-            new Note { Freq = 415, Duration = 4, Time = 34,     Position = 300, Order = 14 },
-            new Note { Freq = 294, Duration = -1, Time = 38,    Position = 500, Order = 15 },
-            new Note { Freq = 294, Duration = 4, Time = 48,     Position = 700,Order = 16 },
-
-            new Note { Freq = 392, Duration = -4, Time = 52,    Position = 100,  Order = 17 },
-            new Note { Freq = 466, Duration = 8, Time = 56,     Position = 300, Order = 18 },
-            new Note { Freq = 440, Duration = 4, Time = 64,      Position = 500,Order = 19 },
-            new Note { Freq = 392, Duration = 2, Time = 68,      Position = 700,Order = 20 },
-
-            new Note { Freq = 587, Duration = 4, Time = 70,  Position = 100,  Order = 21 },
-            new Note { Freq = 698, Duration = 2, Time = 74,  Position = 300,  Order = 22 },
-            new Note { Freq = 659, Duration = 4, Time = 76,   Position = 500, Order = 23 },
-            new Note { Freq = 622, Duration = 2, Time = 80,   Position = 700, Order = 24 },
-
-            new Note { Freq = 494, Duration = 4, Time = 82,  Position = 100,   Order = 25 },
-            new Note { Freq = 622, Duration = -4, Time = 86, Position = 300,    Order = 26 },
-            new Note { Freq = 587, Duration = 8, Time = 92,   Position = 500,  Order = 27 },
-            new Note { Freq = 554, Duration = 4, Time = 100,  Position = 700,   Order = 28 },
-
-            new Note { Freq = 277, Duration = 2, Time = 104,  Position = 100,   Order = 29 },
-            new Note { Freq = 494, Duration = 4, Time = 106,  Position = 300,   Order = 30 },
-            new Note { Freq = 392, Duration = -1, Time = 110, Position = 500,   Order = 31 },
-            new Note { Freq = 466, Duration = 4, Time = 124,   Position = 700,  Order = 32 },
-
-            new Note { Freq = 587, Duration = 2, Time = 128,    Position = 100, Order = 33 },
-            new Note { Freq = 466, Duration = 4, Time = 130,    Position = 300, Order = 34 },
-            new Note { Freq = 587, Duration = 2, Time = 134,    Position = 500,Order = 35 },
-            new Note { Freq = 466, Duration = 4, Time = 136,    Position = 700,Order = 36 },
-
-            new Note { Freq = 622, Duration = 2, Time = 140,    Position = 100, Order = 37 },
-            new Note { Freq = 587, Duration = 4, Time = 142,    Position = 300, Order = 38 },
-            new Note { Freq = 554, Duration = 2, Time = 146,    Position = 500,Order = 39 },
-            new Note { Freq = 440, Duration = 4, Time = 148,    Position = 700,Order = 40 },
-
-            new Note { Freq = 466, Duration = -4, Time = 152,   Position = 100,  Order = 41 },
-            new Note { Freq = 587, Duration = 8, Time = 158,    Position = 300, Order = 42 },
-            new Note { Freq = 554, Duration = 4, Time = 166,    Position = 500,Order = 43 },
-            new Note { Freq = 277, Duration = 2, Time = 170,    Position = 700,Order = 44 },
-
-            new Note { Freq = 294, Duration = 4, Time = 172,     Position = 100, Order = 45 },
-            new Note { Freq = 587, Duration = -1, Time = 176,   Position = 300,  Order = 46 },
-            new Note { Freq = 0,   Duration = 4, Time = 192,    Position = 500,  Order = 47 },
-            new Note { Freq = 466, Duration = 4, Time = 196,     Position = 700,Order = 48 },
-
-            new Note { Freq = 587, Duration = 2, Time = 200,     Position = 100, Order = 49 },
-            new Note { Freq = 466, Duration = 4, Time = 202,    Position = 300, Order = 50 },
-            new Note { Freq = 698, Duration = 2, Time = 206,      Position = 500,Order = 51 },
-            new Note { Freq = 659, Duration = 4, Time = 208,     Position = 700,Order = 52 },
-
-            new Note { Freq = 622, Duration = 2, Time = 212,     Position = 100, Order = 53 },
-            new Note { Freq = 494, Duration = 4, Time = 214,    Position = 300, Order = 54 },
-            new Note { Freq = 622, Duration = -4, Time = 218,     Position = 500, Order = 55 },
-            new Note { Freq = 587, Duration = 8, Time = 224,    Position = 700,Order = 56 },
-
-            new Note { Freq = 554, Duration = 4, Time = 232,     Position = 100, Order = 57 },
-            new Note { Freq = 277, Duration = 2, Time = 236,    Position = 300, Order = 58 },
-            new Note { Freq = 466, Duration = 4, Time = 238,    Position = 500,Order = 59 },
-            new Note { Freq = 392, Duration = -1, Time = 242,   Position = 700, Order = 60 },
-        };
-            merrychristmasNotes = new Note[]
+			gameOfThronesNotes = new Note[]
 {
-    new Note { Freq = 523, Duration = 4, Time = 0, Position = 1, Order = 1 },
-    new Note { Freq = 698, Duration = 4, Time = 4, Position = 2, Order = 2 },
-    new Note { Freq = 698, Duration = 8, Time = 8, Position = 3, Order = 3 },
-    new Note { Freq = 784, Duration = 8, Time = 16, Position = 4, Order = 4 },
-    new Note { Freq = 698, Duration = 8, Time = 24, Position = 5, Order = 5 },
-    new Note { Freq = 659, Duration = 8, Time = 32, Position = 6, Order = 6 },
-    new Note { Freq = 587, Duration = 4, Time = 40, Position = 7, Order = 7 },
-    new Note { Freq = 587, Duration = 4, Time = 44, Position = 8, Order = 8 },
-    new Note { Freq = 587, Duration = 4, Time = 48, Position = 9, Order = 9 },
-    new Note { Freq = 784, Duration = 4, Time = 52, Position = 10, Order = 10 },
-    new Note { Freq = 784, Duration = 8, Time = 56, Position = 11, Order = 11 },
-    new Note { Freq = 880, Duration = 8, Time = 64, Position = 12, Order = 12 },
-    new Note { Freq = 784, Duration = 8, Time = 72, Position = 13, Order = 13 },
-    new Note { Freq = 698, Duration = 8, Time = 80, Position = 14, Order = 14 },
-    new Note { Freq = 659, Duration = 4, Time = 88, Position = 15, Order = 15 },
-    new Note { Freq = 523, Duration = 4, Time = 92, Position = 16, Order = 16 },
-    new Note { Freq = 523, Duration = 4, Time = 96, Position = 17, Order = 17 },
-    new Note { Freq = 880, Duration = 4, Time = 100, Position = 18, Order = 18 },
-    new Note { Freq = 880, Duration = 8, Time = 104, Position = 19, Order = 19 },
-    new Note { Freq = 932, Duration = 8, Time = 112, Position = 20, Order = 20 },
-    new Note { Freq = 880, Duration = 8, Time = 120, Position = 21, Order = 21 },
-    new Note { Freq = 784, Duration = 8, Time = 128, Position = 22, Order = 22 },
-    new Note { Freq = 698, Duration = 4, Time = 136, Position = 23, Order = 23 },
-    new Note { Freq = 587, Duration = 4, Time = 140, Position = 24, Order = 24 },
-    new Note { Freq = 523, Duration = 8, Time = 144, Position = 25, Order = 25 },
-    new Note { Freq = 523, Duration = 8, Time = 152, Position = 26, Order = 26 },
-    new Note { Freq = 587, Duration = 4, Time = 160, Position = 27, Order = 27 },
-    new Note { Freq = 784, Duration = 4, Time = 164, Position = 28, Order = 28 },
-    new Note { Freq = 659, Duration = 4, Time = 168, Position = 29, Order = 29 },
-    new Note { Freq = 698, Duration = 2, Time = 172, Position = 30, Order = 30 },
-    new Note { Freq = 523, Duration = 4, Time = 174, Position = 31, Order = 31 },
-    new Note { Freq = 698, Duration = 4, Time = 178, Position = 32, Order = 32 },
-    new Note { Freq = 698, Duration = 8, Time = 182, Position = 33, Order = 33 },
-    new Note { Freq = 784, Duration = 8, Time = 190, Position = 34, Order = 34 },
-    new Note { Freq = 698, Duration = 8, Time = 198, Position = 35, Order = 35 },
-    new Note { Freq = 659, Duration = 8, Time = 206, Position = 36, Order = 36 },
-    new Note { Freq = 587, Duration = 4, Time = 214, Position = 37, Order = 37 },
-    new Note { Freq = 587, Duration = 4, Time = 218, Position = 38, Order = 38 },
-    new Note { Freq = 587, Duration = 4, Time = 222, Position = 39, Order = 39 },
-    new Note { Freq = 784, Duration = 4, Time = 226, Position = 40, Order = 40 },
-    new Note { Freq = 784, Duration = 8, Time = 230, Position = 41, Order = 41 },
-    new Note { Freq = 880, Duration = 8, Time = 238, Position = 42, Order = 42 },
-    new Note { Freq = 784, Duration = 8, Time = 246, Position = 43, Order = 43 },
-    new Note { Freq = 698, Duration = 8, Time = 254, Position = 44, Order = 44 },
-    new Note { Freq = 659, Duration = 4, Time = 262, Position = 45, Order = 45 },
-    new Note { Freq = 523, Duration = 4, Time = 266, Position = 46, Order = 46 },
-    new Note { Freq = 523, Duration = 4, Time = 270, Position = 47, Order = 47 },
-    new Note { Freq = 880, Duration = 4, Time = 274, Position = 48, Order = 48 },
-    new Note { Freq = 880, Duration = 8, Time = 278, Position = 49, Order = 49 },
-    new Note { Freq = 932, Duration = 8, Time = 286, Position = 50, Order = 50 },
-    new Note { Freq = 880, Duration = 8, Time = 294, Position = 51, Order = 51 },
-    new Note { Freq = 784, Duration = 8, Time = 302, Position = 52, Order = 52 },
-    new Note { Freq = 698, Duration = 4, Time = 310, Position = 53, Order = 53 },
-    new Note { Freq = 587, Duration = 4, Time = 314, Position = 54, Order = 54 },
-    new Note { Freq = 523, Duration = 8, Time = 318, Position = 55, Order = 55 },
-    new Note { Freq = 523, Duration = 8, Time = 326, Position = 56, Order = 56 },
-    new Note { Freq = 587, Duration = 4, Time = 334, Position = 57, Order = 57 },
-    new Note { Freq = 784, Duration = 4, Time = 338, Position = 58, Order = 58 },
-    new Note { Freq = 659, Duration = 4, Time = 342, Position = 59, Order = 59 },
-    new Note { Freq = 698, Duration = 2, Time = 346, Position = 60, Order = 60 },
-    new Note { Freq = 523, Duration = 4, Time = 348, Position = 61, Order = 61 },
-    new Note { Freq = 698, Duration = 4, Time = 352, Position = 62, Order = 62 },
-    new Note { Freq = 698, Duration = 8, Time = 360, Position = 63, Order = 63 },
-    new Note { Freq = 784, Duration = 8, Time = 368, Position = 64, Order = 64 },
-    new Note { Freq = 698, Duration = 8, Time = 376, Position = 65, Order = 65 },
-    new Note { Freq = 659, Duration = 8, Time = 384, Position = 66, Order = 66 },
-    new Note { Freq = 587, Duration = 4, Time = 392, Position = 67, Order = 67 },
-    new Note { Freq = 587, Duration = 4, Time = 396, Position = 68, Order = 68 },
-    new Note { Freq = 587, Duration = 4, Time = 400, Position = 69, Order = 69 },
-    new Note { Freq = 784, Duration = 4, Time = 404, Position = 70, Order = 70 },
-    new Note { Freq = 784, Duration = 8, Time = 408, Position = 71, Order = 71 },
-    new Note { Freq = 880, Duration = 8, Time = 416, Position = 72, Order = 72 },
-    new Note { Freq = 784, Duration = 8, Time = 424, Position = 73, Order = 73 },
-    new Note { Freq = 698, Duration = 8, Time = 432, Position = 74, Order = 74 },
-    new Note { Freq = 659, Duration = 4, Time = 440, Position = 75, Order = 75 },
-    new Note { Freq = 523, Duration = 4, Time = 444, Position = 76, Order = 76 },
-    new Note { Freq = 523, Duration = 4, Time = 448, Position = 77, Order = 77 },
-    new Note { Freq = 880, Duration = 4, Time = 452, Position = 78, Order = 78 },
-    new Note { Freq = 880, Duration = 8, Time = 456, Position = 79, Order = 79 },
-    new Note { Freq = 932, Duration = 8, Time = 464, Position = 80, Order = 80 },
-    new Note { Freq = 880, Duration = 8, Time = 472, Position = 81, Order = 81 },
-    new Note { Freq = 784, Duration = 8, Time = 480, Position = 82, Order = 82 },
-    new Note { Freq = 698, Duration = 4, Time = 488, Position = 83, Order = 83 },
-    new Note { Freq = 587, Duration = 4, Time = 492, Position = 84, Order = 84 },
-    new Note { Freq = 523, Duration = 8, Time = 496, Position = 85, Order = 85 },
-    new Note { Freq = 523, Duration = 8, Time = 504, Position = 86, Order = 86 },
-    new Note { Freq = 587, Duration = 4, Time = 512, Position = 87, Order = 87 },
-    new Note { Freq = 784, Duration = 4, Time = 516, Position = 88, Order = 88 },
-    new Note { Freq = 659, Duration = 4, Time = 520, Position = 89, Order = 89 },
-    new Note { Freq = 698, Duration = 2, Time = 524, Position = 90, Order = 90 },
-    new Note { Freq = 523, Duration = 4, Time = 526, Position = 91, Order = 91 }
-};
-            supermarioNotes = new Note[]{
-    new Note { Freq = 659, Duration = 8, Time = 0, Position = 1, Order = 1 },
-    new Note { Freq = 659, Duration = 8, Time = 8, Position = 2, Order = 2 },
-    new Note { Freq = 0, Duration = 8, Time = 16, Position = 3, Order = 3 },
-    new Note { Freq = 659, Duration = 8, Time = 24, Position = 4, Order = 4 },
-    new Note { Freq = 0, Duration = 8, Time = 32, Position = 5, Order = 5 },
-    new Note { Freq = 523, Duration = 8, Time = 40, Position = 6, Order = 6 },
-    new Note { Freq = 659, Duration = 8, Time = 48, Position = 7, Order = 7 },
-    new Note { Freq = 784, Duration = 4, Time = 56, Position = 8, Order = 8 },
-    new Note { Freq = 0, Duration = 4, Time = 60, Position = 9, Order = 9 },
-    new Note { Freq = 392, Duration = 8, Time = 64, Position = 10, Order = 10 },
-    new Note { Freq = 0, Duration = 4, Time = 72, Position = 11, Order = 11 },
-    new Note { Freq = 523, Duration = -4, Time = 76, Position = 12, Order = 12 },
-    new Note { Freq = 392, Duration = 8, Time = 80, Position = 13, Order = 13 },
-    new Note { Freq = 0, Duration = 4, Time = 88, Position = 14, Order = 14 },
-    new Note { Freq = 330, Duration = -4, Time = 92, Position = 15, Order = 15 },
-    new Note { Freq = 440, Duration = 4, Time = 96, Position = 16, Order = 16 },
-    new Note { Freq = 494, Duration = 4, Time = 100, Position = 17, Order = 17 },
-    new Note { Freq = 466, Duration = 8, Time = 104, Position = 18, Order = 18 },
-    new Note { Freq = 440, Duration = 4, Time = 112, Position = 19, Order = 19 },
-    new Note { Freq = 392, Duration = -8, Time = 116, Position = 20, Order = 20 },
-    new Note { Freq = 659, Duration = -8, Time = 124, Position = 21, Order = 21 },
-    new Note { Freq = 784, Duration = -8, Time = 132, Position = 22, Order = 22 },
-    new Note { Freq = 880, Duration = 4, Time = 140, Position = 23, Order = 23 },
-    new Note { Freq = 698, Duration = 8, Time = 148, Position = 24, Order = 24 },
-    new Note { Freq = 784, Duration = 8, Time = 156, Position = 25, Order = 25 },
-    new Note { Freq = 0, Duration = 8, Time = 164, Position = 26, Order = 26 },
-    new Note { Freq = 659, Duration = 4, Time = 172, Position = 27, Order = 27 },
-    new Note { Freq = 523, Duration = 8, Time = 176, Position = 28, Order = 28 },
-    new Note { Freq = 587, Duration = 8, Time = 184, Position = 29, Order = 29 },
-    new Note { Freq = 494, Duration = -4, Time = 192, Position = 30, Order = 30 },
-    new Note { Freq = 523, Duration = -4, Time = 200, Position = 31, Order = 31 },
-    new Note { Freq = 392, Duration = 8, Time = 208, Position = 32, Order = 32 },
-    new Note { Freq = 0, Duration = 4, Time = 216, Position = 33, Order = 33 },
-    new Note { Freq = 330, Duration = -4, Time = 220, Position = 34, Order = 34 },
-    new Note { Freq = 440, Duration = 4, Time = 224, Position = 35, Order = 35 },
-    new Note { Freq = 494, Duration = 4, Time = 228, Position = 36, Order = 36 },
-    new Note { Freq = 466, Duration = 8, Time = 232, Position = 37, Order = 37 },
-    new Note { Freq = 440, Duration = 4, Time = 240, Position = 38, Order = 38 },
-    new Note { Freq = 392, Duration = -8, Time = 244, Position = 39, Order = 39 },
-    new Note { Freq = 659, Duration = -8, Time = 252, Position = 40, Order = 40 },
-    new Note { Freq = 784, Duration = -8, Time = 260, Position = 41, Order = 41 },
-    new Note { Freq = 880, Duration = 4, Time = 268, Position = 42, Order = 42 },
-    new Note { Freq = 698, Duration = 8, Time = 276, Position = 43, Order = 43 },
-    new Note { Freq = 784, Duration = 8, Time = 284, Position = 44, Order = 44 },
-    new Note { Freq = 0, Duration = 8, Time = 292, Position = 45, Order = 45 },
-    new Note { Freq = 659, Duration = 4, Time = 300, Position = 46, Order = 46 },
-    new Note { Freq = 523, Duration = 8, Time = 304, Position = 47, Order = 47 },
-    new Note { Freq = 587, Duration = 8, Time = 312, Position = 48, Order = 48 },
-    new Note { Freq = 494, Duration = -4, Time = 320, Position = 49, Order = 49 },
-    new Note { Freq = 523, Duration = -4, Time = 328, Position = 50, Order = 50 },
-
-    new Note { Freq = 784, Duration = 8, Time = 336, Position = 51, Order = 51 },
-    new Note { Freq = 740, Duration = 8, Time = 344, Position = 52, Order = 52 },
-    new Note { Freq = 698, Duration = 8, Time = 352, Position = 53, Order = 53 },
-    new Note { Freq = 622, Duration = 4, Time = 360, Position = 54, Order = 54 },
-    new Note { Freq = 659, Duration = 8, Time = 368, Position = 55, Order = 55 },
-    new Note { Freq = 0, Duration = 8, Time = 376, Position = 56, Order = 56 },
-    new Note { Freq = 415, Duration = 8, Time = 384, Position = 57, Order = 57 },
-    new Note { Freq = 440, Duration = 8, Time = 392, Position = 58, Order = 58 },
-    new Note { Freq = 262, Duration = 8, Time = 400, Position = 59, Order = 59 },
-    new Note { Freq = 0, Duration = 8, Time = 408, Position = 60, Order = 60 },
-    new Note { Freq = 440, Duration = 8, Time = 416, Position = 61, Order = 61 },
-    new Note { Freq = 523, Duration = 8, Time = 424, Position = 62, Order = 62 },
-    new Note { Freq = 587, Duration = 8, Time = 432, Position = 63, Order = 63 },
-    new Note { Freq = 0, Duration = 4, Time = 440, Position = 64, Order = 64 },
-    new Note { Freq = 622, Duration = 4, Time = 444, Position = 65, Order = 65 },
-    new Note { Freq = 0, Duration = 8, Time = 452, Position = 66, Order = 66 },
-    new Note { Freq = 587, Duration = -4, Time = 460, Position = 67, Order = 67 },
-    new Note { Freq = 523, Duration = 2, Time = 468, Position = 68, Order = 68 },
-    new Note { Freq = 0, Duration = 2, Time = 472, Position = 69, Order = 69 },
-
-    new Note { Freq = 784, Duration = 8, Time = 476, Position = 70, Order = 70 },
-    new Note { Freq = 740, Duration = 8, Time = 484, Position = 71, Order = 71 },
-    new Note { Freq = 698, Duration = 8, Time = 492, Position = 72, Order = 72 },
-    new Note { Freq = 622, Duration = 4, Time = 500, Position = 73, Order = 73 },
-    new Note { Freq = 659, Duration = 8, Time = 508, Position = 74, Order = 74 },
-    new Note { Freq = 0, Duration = 8, Time = 516, Position = 75, Order = 75 },
-    new Note { Freq = 415, Duration = 8, Time = 524, Position = 76, Order = 76 },
-    new Note { Freq = 440, Duration = 8, Time = 532, Position = 77, Order = 77 },
-    new Note { Freq = 262, Duration = 8, Time = 540, Position = 78, Order = 78 },
-    new Note { Freq = 0, Duration = 8, Time = 548, Position = 79, Order = 79 },
-    new Note { Freq = 440, Duration = 8, Time = 556, Position = 80, Order = 80 },
-    new Note { Freq = 523, Duration = 8, Time = 564, Position = 81, Order = 81 },
-    new Note { Freq = 587, Duration = 8, Time = 572, Position = 82, Order = 82 },
-
-    new Note { Freq = 0, Duration = 4, Time = 580, Position = 83, Order = 83 },
-    new Note { Freq = 622, Duration = 4, Time = 584, Position = 84, Order = 84 },
-    new Note { Freq = 0, Duration = 8, Time = 592, Position = 85, Order = 85 },
-    new Note { Freq = 587, Duration = -4, Time = 600, Position = 86, Order = 86 },
-    new Note { Freq = 523, Duration = 2, Time = 608, Position = 87, Order = 87 },
-    new Note { Freq = 0, Duration = 2, Time = 612, Position = 88, Order = 88 }
+	new Note { Freq = 392, Duration = 8,  Time = 0,    Position = 100, Order = 1 },
+	new Note { Freq = 262, Duration = 8,  Time = 352,  Position = 300, Order = 2 },
+	new Note { Freq = 311, Duration = 16, Time = 704,  Position = 500, Order = 3 },
+	new Note { Freq = 349, Duration = 16, Time = 880,  Position = 700, Order = 4 },
+	new Note { Freq = 392, Duration = 8,  Time = 1056, Position = 100, Order = 5 },
+	new Note { Freq = 262, Duration = 8,  Time = 1408, Position = 300, Order = 6 },
+	new Note { Freq = 311, Duration = 16, Time = 1760, Position = 500, Order = 7 },
+	new Note { Freq = 349, Duration = 16, Time = 1936, Position = 700, Order = 8 },
+	new Note { Freq = 392, Duration = 8,  Time = 2112, Position = 100, Order = 9 },
+	new Note { Freq = 262, Duration = 8,  Time = 2464, Position = 300, Order = 10 },
+	new Note { Freq = 311, Duration = 16, Time = 2816, Position = 500, Order = 11 },
+	new Note { Freq = 349, Duration = 16, Time = 2992, Position = 700, Order = 12 },
+	new Note { Freq = 392, Duration = 8,  Time = 3168, Position = 100, Order = 13 },
+	new Note { Freq = 262, Duration = 8,  Time = 3520, Position = 300, Order = 14 },
+	new Note { Freq = 330, Duration = 16, Time = 3872, Position = 500, Order = 15 },
+	new Note { Freq = 349, Duration = 16, Time = 4048, Position = 700, Order = 16 },
+	new Note { Freq = 392, Duration = 8,  Time = 4224, Position = 100, Order = 17 },
+	new Note { Freq = 262, Duration = 8,  Time = 4576, Position = 300, Order = 18 },
+	new Note { Freq = 330, Duration = 16, Time = 4928, Position = 500, Order = 19 },
+	new Note { Freq = 349, Duration = 16, Time = 5104, Position = 700, Order = 20 },
+	new Note { Freq = 392, Duration = -4, Time = 5280, Position = 100, Order = 21 },
+	new Note { Freq = 262, Duration = -4, Time = 6337, Position = 300, Order = 22 },
+	new Note { Freq = 311, Duration = 16, Time = 7394, Position = 500, Order = 23 },
+	new Note { Freq = 349, Duration = 16, Time = 7570, Position = 700, Order = 24 },
+	new Note { Freq = 392, Duration = 4,  Time = 7746, Position = 100, Order = 25 },
+	new Note { Freq = 262, Duration = 4,  Time = 8451, Position = 300, Order = 26 },
+	new Note { Freq = 311, Duration = 16, Time = 9156, Position = 500, Order = 27 },
+	new Note { Freq = 349, Duration = 16, Time = 9332, Position = 700, Order = 28 },
+	new Note { Freq = 294, Duration = -1, Time = 9508, Position = 100, Order = 29 },
+	new Note { Freq = 349, Duration = -4, Time = 13742, Position = 300, Order = 30 },
+	new Note { Freq = 233, Duration = -4, Time = 14799, Position = 500, Order = 31 },
+	new Note { Freq = 311, Duration = 16, Time = 15856, Position = 700, Order = 32 },
+	new Note { Freq = 294, Duration = 16, Time = 16032, Position = 100, Order = 33 },
+	new Note { Freq = 349, Duration = 4,  Time = 16208, Position = 300, Order = 34 },
+	new Note { Freq = 233, Duration = -4, Time = 16913, Position = 500, Order = 35 },
+	new Note { Freq = 311, Duration = 16, Time = 17970, Position = 700, Order = 36 },
+	new Note { Freq = 294, Duration = 16, Time = 18146, Position = 100, Order = 37 },
+	new Note { Freq = 262, Duration = -1, Time = 18322, Position = 300, Order = 38 },
+	new Note { Freq = 392, Duration = -4, Time = 22556, Position = 500, Order = 39 },
+	new Note { Freq = 262, Duration = -4, Time = 23613, Position = 700, Order = 40 },
+	new Note { Freq = 311, Duration = 16, Time = 24670, Position = 100, Order = 41 },
+	new Note { Freq = 349, Duration = 16, Time = 24846, Position = 300, Order = 42 },
+	new Note { Freq = 392, Duration = 8,  Time = 25022, Position = 500, Order = 43 },
+	new Note { Freq = 262, Duration = 8,  Time = 25374, Position = 700, Order = 44 },
+	new Note { Freq = 330, Duration = 16, Time = 25726, Position = 100, Order = 45 },
+	new Note { Freq = 349, Duration = 16, Time = 25902, Position = 300, Order = 46 },
+	new Note { Freq = 392, Duration = 8,  Time = 26078, Position = 500, Order = 47 },
+	new Note { Freq = 262, Duration = 8,  Time = 26430, Position = 700, Order = 48 },
+	new Note { Freq = 330, Duration = 16, Time = 26782, Position = 100, Order = 49 },
+	new Note { Freq = 349, Duration = 16, Time = 26958, Position = 300, Order = 50 },
+	new Note { Freq = 0,   Duration = 4,  Time = 27134, Position = 500, Order = 51 },
+	new Note { Freq = 415, Duration = 16, Time = 27839, Position = 700, Order = 52 },
+	new Note { Freq = 466, Duration = 16, Time = 28015, Position = 100, Order = 53 },
+	new Note { Freq = 1047,Duration = 8,  Time = 28191, Position = 300, Order = 54 },
+	new Note { Freq = 784, Duration = 8,  Time = 28543, Position = 500, Order = 55 },
+	new Note { Freq = 831, Duration = 16, Time = 28895, Position = 700, Order = 56 },
+	new Note { Freq = 932, Duration = 16, Time = 29071, Position = 100, Order = 57 },
+	new Note { Freq = 1047,Duration = 8,  Time = 29247, Position = 300, Order = 58 },
+	new Note { Freq = 784, Duration = 16, Time = 29599, Position = 500, Order = 59 },
+	new Note { Freq = 831, Duration = 16, Time = 29775, Position = 700, Order = 60 },
+	new Note { Freq = 932, Duration = 16, Time = 29951, Position = 100, Order = 61 },
+	new Note { Freq = 1047,Duration = 8,  Time = 30127, Position = 300, Order = 62 },
+	new Note { Freq = 784, Duration = 8,  Time = 30479, Position = 500, Order = 63 },
+	new Note { Freq = 831, Duration = 16, Time = 30831, Position = 700, Order = 64 },
+	new Note { Freq = 932, Duration = 16, Time = 31007, Position = 100, Order = 65 },
 };
 
-            InitializeComponent();
+			harryPotterNotes = new Note[] {
+	new Note { Freq = 0, Duration = 2, Time = 0, Position = 100, Order = 1 },
+	new Note { Freq = 294, Duration = 4, Time = 833, Position = 300, Order = 2 },
+	new Note { Freq = 392, Duration = -4, Time = 1249, Position = 500, Order = 3 },
+	new Note { Freq = 466, Duration = 8, Time = 1873, Position = 700, Order = 4 },
+	new Note { Freq = 440, Duration = 4, Time = 2081, Position = 100, Order = 5 },
+	new Note { Freq = 392, Duration = 2, Time = 2497, Position = 300, Order = 6 },
+	new Note { Freq = 587, Duration = 4, Time = 3330, Position = 500, Order = 7 },
+	new Note { Freq = 523, Duration = -2, Time = 3746, Position = 700, Order = 8 },
+	new Note { Freq = 440, Duration = -2, Time = 4995, Position = 100, Order = 9 },
+	new Note { Freq = 392, Duration = -4, Time = 6244, Position = 300, Order = 10 },
+	new Note { Freq = 466, Duration = 8, Time = 6868, Position = 500, Order = 11 },
+	new Note { Freq = 440, Duration = 4, Time = 7076, Position = 700, Order = 12 },
+	new Note { Freq = 349, Duration = 2, Time = 7492, Position = 100, Order = 13 },
+	new Note { Freq = 415, Duration = 4, Time = 8325, Position = 300, Order = 14 },
+	new Note { Freq = 294, Duration = -1, Time = 8741, Position = 500, Order = 15 },
+	new Note { Freq = 294, Duration = 4, Time = 11240, Position = 700, Order = 16 },
+	new Note { Freq = 392, Duration = -4, Time = 11656, Position = 100, Order = 17 },
+	new Note { Freq = 466, Duration = 8, Time = 12280, Position = 300, Order = 18 },
+	new Note { Freq = 440, Duration = 4, Time = 12488, Position = 500, Order = 19 },
+	new Note { Freq = 392, Duration = 2, Time = 12904, Position = 700, Order = 20 },
+	new Note { Freq = 587, Duration = 4, Time = 13737, Position = 100, Order = 21 },
+	new Note { Freq = 698, Duration = 2, Time = 14153, Position = 300, Order = 22 },
+	new Note { Freq = 659, Duration = 4, Time = 14986, Position = 500, Order = 23 },
+	new Note { Freq = 622, Duration = 2, Time = 15402, Position = 700, Order = 24 },
+	new Note { Freq = 494, Duration = 4, Time = 16235, Position = 100, Order = 25 },
+	new Note { Freq = 622, Duration = -4, Time = 16651, Position = 300, Order = 26 },
+	new Note { Freq = 587, Duration = 8, Time = 17275, Position = 500, Order = 27 },
+	new Note { Freq = 554, Duration = 4, Time = 17483, Position = 700, Order = 28 },
+	new Note { Freq = 277, Duration = 2, Time = 17899, Position = 100, Order = 29 },
+	new Note { Freq = 494, Duration = 4, Time = 18732, Position = 300, Order = 30 },
+	new Note { Freq = 392, Duration = -1, Time = 19148, Position = 500, Order = 31 },
+	new Note { Freq = 466, Duration = 4, Time = 21647, Position = 700, Order = 32 },
+	new Note { Freq = 587, Duration = 2, Time = 22063, Position = 100, Order = 33 },
+	new Note { Freq = 466, Duration = 4, Time = 22896, Position = 300, Order = 34 },
+	new Note { Freq = 587, Duration = 2, Time = 23312, Position = 500, Order = 35 },
+	new Note { Freq = 466, Duration = 4, Time = 24145, Position = 700, Order = 36 },
+	new Note { Freq = 622, Duration = 2, Time = 24561, Position = 100, Order = 37 },
+	new Note { Freq = 587, Duration = 4, Time = 25394, Position = 300, Order = 38 },
+	new Note { Freq = 554, Duration = 2, Time = 25810, Position = 500, Order = 39 },
+	new Note { Freq = 440, Duration = 4, Time = 26643, Position = 700, Order = 40 },
+	new Note { Freq = 466, Duration = -4, Time = 27059, Position = 100, Order = 41 },
+	new Note { Freq = 587, Duration = 8, Time = 27683, Position = 300, Order = 42 },
+	new Note { Freq = 554, Duration = 4, Time = 27891, Position = 500, Order = 43 },
+	new Note { Freq = 277, Duration = 2, Time = 28307, Position = 700, Order = 44 },
+	new Note { Freq = 294, Duration = 4, Time = 29140, Position = 100, Order = 45 },
+	new Note { Freq = 587, Duration = -1, Time = 29556, Position = 300, Order = 46 },
+	new Note { Freq = 0, Duration = 4, Time = 32055, Position = 500, Order = 47 },
+	new Note { Freq = 466, Duration = 4, Time = 32471, Position = 700, Order = 48 },
+	new Note { Freq = 587, Duration = 2, Time = 32887, Position = 100, Order = 49 },
+	new Note { Freq = 466, Duration = 4, Time = 33720, Position = 300, Order = 50 },
+	new Note { Freq = 698, Duration = 2, Time = 34136, Position = 500, Order = 51 },
+	new Note { Freq = 659, Duration = 4, Time = 34969, Position = 700, Order = 52 },
+	new Note { Freq = 622, Duration = 2, Time = 35385, Position = 100, Order = 53 },
+	new Note { Freq = 494, Duration = 4, Time = 36218, Position = 300, Order = 54 },
+	new Note { Freq = 622, Duration = -4, Time = 36634, Position = 500, Order = 55 },
+	new Note { Freq = 587, Duration = 8, Time = 37258, Position = 700, Order = 56 },
+	new Note { Freq = 554, Duration = 4, Time = 37466, Position = 100, Order = 57 },
+	new Note { Freq = 277, Duration = 2, Time = 37882, Position = 300, Order = 58 },
+	new Note { Freq = 466, Duration = 4, Time = 38715, Position = 500, Order = 59 },
+	new Note { Freq = 392, Duration = -1, Time = 39131, Position = 700, Order = 60 },
+};
+			merrychristmasNotes = new Note[] {
+	new Note { Freq = 523, Duration = 4, Time = 0,    Position = 100, Order = 1 },
+	new Note { Freq = 698, Duration = 4, Time = 428,  Position = 300, Order = 2 },
+	new Note { Freq = 698, Duration = 8, Time = 856,  Position = 500, Order = 3 },
+	new Note { Freq = 784, Duration = 8, Time = 1070, Position = 700, Order = 4 },
+	new Note { Freq = 698, Duration = 8, Time = 1284, Position = 100, Order = 5 },
+	new Note { Freq = 659, Duration = 8, Time = 1498, Position = 300, Order = 6 },
+	new Note { Freq = 587, Duration = 4, Time = 1712, Position = 500, Order = 7 },
+	new Note { Freq = 587, Duration = 4, Time = 2140, Position = 700, Order = 8 },
+	new Note { Freq = 587, Duration = 4, Time = 2568, Position = 100, Order = 9 },
+	new Note { Freq = 784, Duration = 4, Time = 2996, Position = 300, Order = 10 },
+	new Note { Freq = 784, Duration = 8, Time = 3424, Position = 500, Order = 11 },
+	new Note { Freq = 880, Duration = 8, Time = 3638, Position = 700, Order = 12 },
+	new Note { Freq = 784, Duration = 8, Time = 3852, Position = 100, Order = 13 },
+	new Note { Freq = 698, Duration = 8, Time = 4066, Position = 300, Order = 14 },
+	new Note { Freq = 659, Duration = 4, Time = 4280, Position = 500, Order = 15 },
+	new Note { Freq = 523, Duration = 4, Time = 4708, Position = 700, Order = 16 },
+	new Note { Freq = 523, Duration = 4, Time = 5136, Position = 100, Order = 17 },
+	new Note { Freq = 880, Duration = 4, Time = 5564, Position = 300, Order = 18 },
+	new Note { Freq = 880, Duration = 8, Time = 5992, Position = 500, Order = 19 },
+	new Note { Freq = 932, Duration = 8, Time = 6206, Position = 700, Order = 20 },
+	new Note { Freq = 880, Duration = 8, Time = 6420, Position = 100, Order = 21 },
+	new Note { Freq = 784, Duration = 8, Time = 6634, Position = 300, Order = 22 },
+	new Note { Freq = 698, Duration = 4, Time = 6848, Position = 500, Order = 23 },
+	new Note { Freq = 587, Duration = 4, Time = 7276, Position = 700, Order = 24 },
+	new Note { Freq = 523, Duration = 8, Time = 7704, Position = 100, Order = 25 },
+	new Note { Freq = 523, Duration = 8, Time = 7918, Position = 300, Order = 26 },
+	new Note { Freq = 587, Duration = 4, Time = 8132, Position = 500, Order = 27 },
+	new Note { Freq = 784, Duration = 4, Time = 8560, Position = 700, Order = 28 },
+	new Note { Freq = 659, Duration = 4, Time = 8988, Position = 100, Order = 29 },
+	new Note { Freq = 698, Duration = 2, Time = 9416, Position = 300, Order = 30 },
+	new Note { Freq = 523, Duration = 4, Time = 10273, Position = 500, Order = 31 },
+	new Note { Freq = 698, Duration = 4, Time = 10701, Position = 700, Order = 32 },
+	new Note { Freq = 698, Duration = 8, Time = 11129, Position = 100, Order = 33 },
+	new Note { Freq = 784, Duration = 8, Time = 11343, Position = 300, Order = 34 },
+	new Note { Freq = 698, Duration = 8, Time = 11557, Position = 500, Order = 35 },
+	new Note { Freq = 659, Duration = 8, Time = 11771, Position = 700, Order = 36 },
+	new Note { Freq = 587, Duration = 4, Time = 11985, Position = 100, Order = 37 },
+	new Note { Freq = 587, Duration = 4, Time = 12413, Position = 300, Order = 38 },
+	new Note { Freq = 587, Duration = 4, Time = 12841, Position = 500, Order = 39 },
+	new Note { Freq = 784, Duration = 4, Time = 13269, Position = 700, Order = 40 },
+	new Note { Freq = 784, Duration = 8, Time = 13697, Position = 100, Order = 41 },
+	new Note { Freq = 880, Duration = 8, Time = 13911, Position = 300, Order = 42 },
+	new Note { Freq = 784, Duration = 8, Time = 14125, Position = 500, Order = 43 },
+	new Note { Freq = 698, Duration = 8, Time = 14339, Position = 700, Order = 44 },
+	new Note { Freq = 659, Duration = 4, Time = 14553, Position = 100, Order = 45 },
+	new Note { Freq = 523, Duration = 4, Time = 14981, Position = 300, Order = 46 },
+	new Note { Freq = 523, Duration = 4, Time = 15409, Position = 500, Order = 47 },
+	new Note { Freq = 880, Duration = 4, Time = 15837, Position = 700, Order = 48 },
+	new Note { Freq = 880, Duration = 8, Time = 16265, Position = 100, Order = 49 },
+	new Note { Freq = 932, Duration = 8, Time = 16479, Position = 300, Order = 50 },
+	new Note { Freq = 880, Duration = 8, Time = 16693, Position = 500, Order = 51 },
+	new Note { Freq = 784, Duration = 8, Time = 16907, Position = 700, Order = 52 },
+	new Note { Freq = 698, Duration = 4, Time = 17121, Position = 100, Order = 53 },
+	new Note { Freq = 587, Duration = 4, Time = 17549, Position = 300, Order = 54 },
+	new Note { Freq = 523, Duration = 8, Time = 17977, Position = 500, Order = 55 },
+	new Note { Freq = 523, Duration = 8, Time = 18191, Position = 700, Order = 56 },
+	new Note { Freq = 587, Duration = 4, Time = 18405, Position = 100, Order = 57 },
+	new Note { Freq = 784, Duration = 4, Time = 18833, Position = 300, Order = 58 },
+	new Note { Freq = 659, Duration = 4, Time = 19261, Position = 500, Order = 59 },
+	new Note { Freq = 698, Duration = 2, Time = 19689, Position = 700, Order = 60 },
+	new Note { Freq = 523, Duration = 4, Time = 20546, Position = 100, Order = 61 },
+	new Note { Freq = 698, Duration = 4, Time = 20974, Position = 300, Order = 62 },
+	new Note { Freq = 698, Duration = 8, Time = 21402, Position = 500, Order = 63 },
+	new Note { Freq = 784, Duration = 8, Time = 21616, Position = 700, Order = 64 },
+	new Note { Freq = 698, Duration = 8, Time = 21830, Position = 100, Order = 65 },
+	new Note { Freq = 659, Duration = 8, Time = 22044, Position = 300, Order = 66 },
+	new Note { Freq = 587, Duration = 4, Time = 22258, Position = 500, Order = 67 },
+	new Note { Freq = 587, Duration = 4, Time = 22686, Position = 700, Order = 68 },
+	new Note { Freq = 587, Duration = 4, Time = 23114, Position = 100, Order = 69 },
+	new Note { Freq = 784, Duration = 4, Time = 23542, Position = 300, Order = 70 },
+	new Note { Freq = 784, Duration = 8, Time = 23970, Position = 500, Order = 71 },
+	new Note { Freq = 880, Duration = 8, Time = 24184, Position = 700, Order = 72 },
+	new Note { Freq = 784, Duration = 8, Time = 24398, Position = 100, Order = 73 },
+	new Note { Freq = 698, Duration = 8, Time = 24612, Position = 300, Order = 74 },
+	new Note { Freq = 659, Duration = 4, Time = 24826, Position = 500, Order = 75 },
+	new Note { Freq = 523, Duration = 4, Time = 25254, Position = 700, Order = 76 },
+	new Note { Freq = 523, Duration = 4, Time = 25682, Position = 100, Order = 77 },
+	new Note { Freq = 880, Duration = 4, Time = 26110, Position = 300, Order = 78 },
+	new Note { Freq = 880, Duration = 8, Time = 26538, Position = 500, Order = 79 },
+	new Note { Freq = 932, Duration = 8, Time = 26752, Position = 700, Order = 80 },
+	new Note { Freq = 880, Duration = 8, Time = 26966, Position = 100, Order = 81 },
+	new Note { Freq = 784, Duration = 8, Time = 27180, Position = 300, Order = 82 },
+	new Note { Freq = 698, Duration = 4, Time = 27394, Position = 500, Order = 83 },
+	new Note { Freq = 587, Duration = 4, Time = 27822, Position = 700, Order = 84 },
+	new Note { Freq = 523, Duration = 8, Time = 28250, Position = 100, Order = 85 },
+	new Note { Freq = 523, Duration = 8, Time = 28464, Position = 300, Order = 86 },
+	new Note { Freq = 587, Duration = 4, Time = 28678, Position = 500, Order = 87 },
+	new Note { Freq = 784, Duration = 4, Time = 29106, Position = 700, Order = 88 },
+	new Note { Freq = 659, Duration = 4, Time = 29534, Position = 100, Order = 89 },
+	new Note { Freq = 698, Duration = 2, Time = 29962, Position = 300, Order = 90 },
+	new Note { Freq = 523, Duration = 4, Time = 30819, Position = 500, Order = 91 },
+};
+
+
+			supermarioNotes = new Note[] {
+	new Note { Freq = 659, Duration = 8, Time = 0,    Position = 100, Order = 1 },
+	new Note { Freq = 659, Duration = 8, Time = 200,  Position = 300, Order = 2 },
+	new Note { Freq = 0,   Duration = 8, Time = 400,  Position = 500, Order = 3 },
+	new Note { Freq = 659, Duration = 8, Time = 600,  Position = 700, Order = 4 },
+	new Note { Freq = 0,   Duration = 8, Time = 800,  Position = 100, Order = 5 },
+	new Note { Freq = 523, Duration = 8, Time = 1000, Position = 300, Order = 6 },
+	new Note { Freq = 659, Duration = 8, Time = 1200, Position = 500, Order = 7 },
+	new Note { Freq = 784, Duration = 4, Time = 1400, Position = 700, Order = 8 },
+	new Note { Freq = 0,   Duration = 4, Time = 1800, Position = 100, Order = 9 },
+	new Note { Freq = 392, Duration = 8, Time = 2200, Position = 300, Order = 10 },
+	new Note { Freq = 0,   Duration = 4, Time = 2400, Position = 500, Order = 11 },
+	new Note { Freq = 523, Duration = -4, Time = 2800, Position = 700, Order = 12 },
+	new Note { Freq = 392, Duration = 8, Time = 3400, Position = 100, Order = 13 },
+	new Note { Freq = 0,   Duration = 4, Time = 3600, Position = 300, Order = 14 },
+	new Note { Freq = 330, Duration = -4, Time = 4000, Position = 500, Order = 15 },
+	new Note { Freq = 440, Duration = 4, Time = 4600,  Position = 700, Order = 16 },
+	new Note { Freq = 494, Duration = 4, Time = 5000,  Position = 100, Order = 17 },
+	new Note { Freq = 466, Duration = 8, Time = 5400,  Position = 300, Order = 18 },
+	new Note { Freq = 440, Duration = 4, Time = 5600,  Position = 500, Order = 19 },
+	new Note { Freq = 392, Duration = -8, Time = 6000, Position = 700, Order = 20 },
+	new Note { Freq = 659, Duration = -8, Time = 6300, Position = 100, Order = 21 },
+	new Note { Freq = 784, Duration = -8, Time = 6600, Position = 300, Order = 22 },
+	new Note { Freq = 880, Duration = 4, Time = 6900,  Position = 500, Order = 23 },
+	new Note { Freq = 698, Duration = 8, Time = 7300,  Position = 700, Order = 24 },
+	new Note { Freq = 784, Duration = 8, Time = 7500,  Position = 100, Order = 25 },
+	new Note { Freq = 0,   Duration = 8, Time = 7700,  Position = 300, Order = 26 },
+	new Note { Freq = 659, Duration = 4, Time = 7900,  Position = 500, Order = 27 },
+	new Note { Freq = 523, Duration = 8, Time = 8300,  Position = 700, Order = 28 },
+	new Note { Freq = 587, Duration = 8, Time = 8500,  Position = 100, Order = 29 },
+	new Note { Freq = 494, Duration = -4, Time = 8700, Position = 300, Order = 30 },
+	new Note { Freq = 523, Duration = -4, Time = 9300, Position = 500, Order = 31 },
+	new Note { Freq = 392, Duration = 8, Time = 9900,  Position = 700, Order = 32 },
+	new Note { Freq = 0,   Duration = 4, Time = 10100, Position = 100, Order = 33 },
+	new Note { Freq = 330, Duration = -4, Time = 10500,Position = 300, Order = 34 },
+	new Note { Freq = 440, Duration = 4, Time = 11100, Position = 500, Order = 35 },
+	new Note { Freq = 494, Duration = 4, Time = 11500, Position = 700, Order = 36 },
+	new Note { Freq = 466, Duration = 8, Time = 11900, Position = 100, Order = 37 },
+	new Note { Freq = 440, Duration = 4, Time = 12100, Position = 300, Order = 38 },
+	new Note { Freq = 392, Duration = -8, Time = 12500,Position = 500, Order = 39 },
+	new Note { Freq = 659, Duration = -8, Time = 12800,Position = 700, Order = 40 },
+	new Note { Freq = 784, Duration = -8, Time = 13100,Position = 100, Order = 41 },
+	new Note { Freq = 880, Duration = 4, Time = 13400, Position = 300, Order = 42 },
+	new Note { Freq = 698, Duration = 8, Time = 13800, Position = 500, Order = 43 },
+	new Note { Freq = 784, Duration = 8, Time = 14000, Position = 700, Order = 44 },
+	new Note { Freq = 0,   Duration = 8, Time = 14200, Position = 100, Order = 45 },
+	new Note { Freq = 659, Duration = 4, Time = 14400, Position = 300, Order = 46 },
+	new Note { Freq = 523, Duration = 8, Time = 14800, Position = 500, Order = 47 },
+	new Note { Freq = 587, Duration = 8, Time = 15000, Position = 700, Order = 48 },
+	new Note { Freq = 494, Duration = -4, Time = 15200,Position = 100, Order = 49 },
+	new Note { Freq = 523, Duration = -4, Time = 15800,Position = 300, Order = 50 },
+	new Note { Freq = 784, Duration = 8, Time = 16400, Position = 500, Order = 51 },
+	new Note { Freq = 740, Duration = 8, Time = 16600, Position = 700, Order = 52 },
+	new Note { Freq = 698, Duration = 8, Time = 16800, Position = 100, Order = 53 },
+	new Note { Freq = 622, Duration = 4, Time = 17000, Position = 300, Order = 54 },
+	new Note { Freq = 659, Duration = 8, Time = 17400, Position = 500, Order = 55 },
+	new Note { Freq = 0,   Duration = 8, Time = 17600, Position = 700, Order = 56 },
+	new Note { Freq = 415, Duration = 8, Time = 17800, Position = 100, Order = 57 },
+	new Note { Freq = 440, Duration = 8, Time = 18000, Position = 300, Order = 58 },
+	new Note { Freq = 262, Duration = 8, Time = 18200, Position = 500, Order = 59 },
+	new Note { Freq = 0,   Duration = 8, Time = 18400, Position = 700, Order = 60 },
+	new Note { Freq = 440, Duration = 8, Time = 18600, Position = 100, Order = 61 },
+	new Note { Freq = 523, Duration = 8, Time = 18800, Position = 300, Order = 62 },
+	new Note { Freq = 587, Duration = 8, Time = 19000, Position = 500, Order = 63 },
+	new Note { Freq = 0,   Duration = 4, Time = 19200, Position = 700, Order = 64 },
+	new Note { Freq = 622, Duration = 4, Time = 19600, Position = 100, Order = 65 },
+	new Note { Freq = 0,   Duration = 8, Time = 20000, Position = 300, Order = 66 },
+	new Note { Freq = 587, Duration = -4,Time = 20200, Position = 500, Order = 67 },
+	new Note { Freq = 523, Duration = 2, Time = 20800, Position = 700, Order = 68 },
+	new Note { Freq = 0,   Duration = 2, Time = 21600, Position = 100, Order = 69 },
+	new Note { Freq = 784, Duration = 8, Time = 22400, Position = 300, Order = 70 },
+	new Note { Freq = 740, Duration = 8, Time = 22600, Position = 500, Order = 71 },
+	new Note { Freq = 698, Duration = 8, Time = 22800, Position = 700, Order = 72 },
+	new Note { Freq = 622, Duration = 4, Time = 23000, Position = 100, Order = 73 },
+	new Note { Freq = 659, Duration = 8, Time = 23400, Position = 300, Order = 74 },
+	new Note { Freq = 0,   Duration = 8, Time = 23600, Position = 500, Order = 75 },
+	new Note { Freq = 415, Duration = 8, Time = 23800, Position = 700, Order = 76 },
+	new Note { Freq = 440, Duration = 8, Time = 24000, Position = 100, Order = 77 },
+	new Note { Freq = 262, Duration = 8, Time = 24200, Position = 300, Order = 78 },
+	new Note { Freq = 0,   Duration = 8, Time = 24400, Position = 500, Order = 79 },
+	new Note { Freq = 440, Duration = 8, Time = 24600, Position = 700, Order = 80 },
+	new Note { Freq = 523, Duration = 8, Time = 24800, Position = 100, Order = 81 },
+	new Note { Freq = 587, Duration = 8, Time = 25000, Position = 300, Order = 82 },
+	new Note { Freq = 0,   Duration = 4, Time = 25200, Position = 500, Order = 83 },
+	new Note { Freq = 622, Duration = 4, Time = 25600, Position = 700, Order = 84 },
+	new Note { Freq = 0,   Duration = 8, Time = 26000, Position = 100, Order = 85 },
+	new Note { Freq = 587, Duration = -4,Time = 26200, Position = 300, Order = 86 },
+	new Note { Freq = 523, Duration = 2, Time = 26800, Position = 500, Order = 87 },
+	new Note { Freq = 0,   Duration = 2, Time = 27600, Position = 700, Order = 88 },
+};
+
+
+			InitializeComponent();
             this.KeyPreview = true;
             timer.Interval = 500;
             timer.Tick += ConnectArduino;
@@ -511,7 +466,7 @@ namespace Mikroislemciler
                     }
                     else if(playingSong == "sm")
                     {
-                        PlaySong(note, supermariotempo, supermarioNotes.Length);
+						PlaySong(note, supermariotempo, supermarioNotes.Length);
 
                     }
                     //SendNoteToArduino(note);
@@ -1037,9 +992,7 @@ namespace Mikroislemciler
             int wholenote = (60000 * 4) / tempo;
 
             if (serialPort.IsOpen)
-            {
-               
-                
+            {   
                     if (calmayaDevamEt)
                     {
                         int frequency = melody.Freq;
@@ -1123,54 +1076,62 @@ namespace Mikroislemciler
 
         private void GameButton_Click(object sender, EventArgs e)
         {
-            if (panel1.Visible)
+            try
             {
-                panel1.BringToFront();
+				if (panel1.Visible)
+				{
+					panel1.BringToFront();
 
 
-                var selected = listBox1.SelectedItem;
+					var selected = listBox1.SelectedItem;
 
-                if (selected.ToString() == "Game of Thrones")
-                {
-                    playingSong = "got";
-                    selectedSong = gameOfThronesNotes;
-                }
-                else if (selected.ToString() == "Harry Potter")
-                {
-                    playingSong = "hp";
-                    selectedSong = harryPotterNotes;
-                }
-                else if (selected.ToString() == "Merry Christmas")
-                {
-                    playingSong = "mc";
-                    selectedSong = merrychristmasNotes;
-                }
-                else if (selected.ToString() == "Super Mario")
-                {
-                    playingSong = "sm";
-                    selectedSong = supermarioNotes;
-                }
+					if (selected.ToString() == "Game of Thrones")
+					{
+						playingSong = "got";
+						selectedSong = gameOfThronesNotes;
+					}
+					else if (selected.ToString() == "Harry Potter")
+					{
+						playingSong = "hp";
+						selectedSong = harryPotterNotes;
+					}
+					else if (selected.ToString() == "Merry Christmas")
+					{
+						playingSong = "mc";
+						selectedSong = merrychristmasNotes;
+					}
+					else if (selected.ToString() == "Super Mario")
+					{
+						playingSong = "sm";
+						selectedSong = supermarioNotes;
+					}
 
-                if (selectedSong == null)
-                {
-                    playingSong = "";
-                    MessageBox.Show("Lütfen þarký seçin!");
-                    return;
-                }
-                if (gameState == GameState.Finished)
-                {
-                    RestartGame();
-                }
-                else if (gameState == GameState.Running)
-                {
+					if (selectedSong == null)
+					{
+						playingSong = "";
+						MessageBox.Show("Lütfen þarký seçin!");
+						return;
+					}
+					if (gameState == GameState.Finished)
+					{
+						RestartGame();
+					}
+					else if (gameState == GameState.Running)
+					{
 
-                    RestartGame();
-                }
-                else if (gameState == GameState.NotStarted)
-                {
-                    StartGame();
-                }
+						RestartGame();
+					}
+					else if (gameState == GameState.NotStarted)
+					{
+						StartGame();
+					}
+				}
+			}
+            catch (Exception ex)
+            {
+                MessageBox.Show("Lütfen bir þarký seçin");
             }
+            
         }
 
         private void StopSongButton_Click(object sender, EventArgs e)
