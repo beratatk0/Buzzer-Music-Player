@@ -1,1 +1,1 @@
-bne ardinyoyum sarki calcam
+
